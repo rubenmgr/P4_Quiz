@@ -89,15 +89,13 @@ exports.testCmd = (rl,id) => {
 
                 const resp = quiz.answer;
 
-
-
                 if (respuesta.trim().toLowerCase() === resp.trim().toLowerCase()){
-                    log('Su respuesta es:')
+                    log('Su respuesta es correcta.')
                     biglog("Correcta", "green")
                     rl.prompt();
 
                 }else {
-                    log('Su respuesta es:')
+                    log('Su respuesta es incorrecta.')
                     biglog("Incorrecta", "red")
                     rl.prompt();
                 }
