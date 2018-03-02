@@ -13,5 +13,8 @@
     "node"
   ],
   "author": "Rubén",
-  "license": "Unlicense"
+  "license": "Unlicense",
+  "dependencies": {
+    "figlet": "^1.2.0"
+  }
 }
