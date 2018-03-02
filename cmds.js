@@ -114,12 +114,12 @@ exports.testCmd = (rl,id) => {
     exports.playCmd = rl => {
 
         let score = 0;
-        let tamaño = model.count();
-        let toBeResolved = new Array(tamaño);
+        let size = model.count();
+        let toBeResolved = new Array(size);
 
-        for (var i =0; i <tamaño; i++){
 
-            for (var j=0; j<tamaño; j++ ){
+        for (var i =0; i <toBeResolved.length; i++){
+            for (var j=0; j<size; j++ ){
                 toBeResolved[j]= j;
             }
             const playOne = () => {
@@ -133,11 +133,12 @@ exports.testCmd = (rl,id) => {
                         let aleatorio = Math.floor(Math.random()*(toBeResolved.length));
                         let id = toBeResolved[aleatorio];
                         let quiz = model.getByIndex(id);
-                        toBeResolved.splice(aleatorio, 1);
+
                         rl.question(`${colorize(  quiz.question, 'red')}${colorize('?  ', 'red')}`, respuesta => {
                             const resp = quiz.answer;
                             if (respuesta.trim().toLowerCase() === resp.trim().toLowerCase()){
                                 score++;
+                                toBeResolved.splice(aleatorio, 1);
                                 log(`Correcto - Lleva ${score} aciertos`)
                                 playOne();
                             }else {
