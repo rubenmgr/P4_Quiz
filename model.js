@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const sqlite = require('sqlite3')
 
 const sequelize = new Sequelize("sqlite:quizzes.sqlite", { logging: false, operatorsAliases: false});
 
