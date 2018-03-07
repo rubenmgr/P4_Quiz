@@ -148,25 +148,25 @@ exports.testCmd = (rl,id) => {
 
     validateId(id)
         .then(id => models.quiz.findById(id))
-.then(quiz=>{
-        if(!quiz){
-        throw  new Error(`No existe un quiz asociado al id=${id}.`)
-    }
-    return makeQuestion(rl,`${quiz.question} ? `)
-        .then(a => {
-        let resp = a.trim().toLowerCase()
-        let resp2 =quiz.answer;
-    if(resp !== resp2.trim().toLowerCase()) {
-        log('Su respuesta es incorrecta.'),
-            biglog("Incorrecta", "red")
+        .then(quiz=>{
+            if(!quiz){
+                throw  new Error(`No existe un quiz asociado al id=${id}.`)
+            }
+            return makeQuestion(rl,`${quiz.question} ? `)
+                .then(a => {
+                    let resp = a.trim().toLowerCase()
+                    let resp2 =quiz.answer;
+                    if(resp !== resp2.trim().toLowerCase()) {
+                        log('Su respuesta es incorrecta.'),
+                            biglog("Incorrecta", "red")
 
-    }else {
-        return log('Su respuesta es correcta.'),
-            biglog("Correcta", "green")
+                    }else {
+                        return log('Su respuesta es correcta.'),
+                            biglog("Correcta", "green")
 
-    }
-});
-})
+                    }
+                });
+        })
 
 .catch(error=>{
         errorlog(error.message);
@@ -181,61 +181,58 @@ exports.testCmd = (rl,id) => {
 
 
 exports.playCmd = rl => {
-
     let score = 0;
     models.quiz.findAll()
-        .then(quiz=> {
-        for(var i =0; i <quiz.length; i++){
-        if (quiz.length <= 0) {
-            log("No hay mas preguntas");
-            log(`Fin del juego. Aciertos: ${score}`);
-            biglog(`${score}`, "blue");
-        } else {
-            let id = Math.floor(Math.random() * (quiz.length));
-            validateId(id)
-                .then(id => models.quiz.findById(id))
-        .then(q => {
-                return makeQuestion(rl, `${q.question} ? `)
-                    .then(a => {
-                    let resp = a.trim().toLowerCase();
-            let resp2 = q.answer;
-            if (resp !== resp2.trim().toLowerCase()) {
-                log('INCORRECTO');
-                log(`Fin del juego. Aciertos: ${score}`);
-                biglog(`${score}`, "blue");
+        .then(quizzes=> {
+            for (var i =0; i <quizzes.length; i++){
+                const playOne = () => {
+                    if(quizzes.length <= 0){
+                        return log("No hay mas preguntas"),
+                            log(`Fin del juego. Aciertos: ${score}`),
+                            biglog(`${score}`, "blue");
 
-            } else {
-                score++;
-                quiz.splice(id, 1);
-                log(`Correcto - Lleva ${score} aciertos`);
+                    }else{
+                        let id = Math.floor(Math.random() * (quizzes.length));
+                        quizzes[id];k
+                        validateId(id)
+                            .then(id => models.quiz.findById(id))
+                            .then(quiz=>{
+                                if(!quiz){
+                                    throw  new Error(`No existe un quiz asociado al id=${id}.`)
+                                }
+                                return makeQuestion(rl, `${quiz.question} ? `)
+                                    .then(a=>{
+                                        let resp = a.trim().toLowerCase();
+                                        let resp2 = quiz.answer;
+                                        if (resp !== resp2.trim().toLowerCase()){
+                                            log('INCORRECTO');
+                                            log(`Fin del juego. Aciertos: ${score}`);
+                                            biglog(`${score}`, "blue");
+                                        }else{
+                                            score++;
+                                            quizzes.splice(id, 1);
+                                            log(`Correcto - Lleva ${score} aciertos`);
+                                            playOne();
+                                        }
+                                    })
+                                    .then(()=>{
+                                        rl.prompt();
+                                    });
+                            })
+                    }
 
+                }
+                playOne();
             }
-        });
+
         })
-
-
-
-        }
-
-
-    }})
-
-.catch(error=>{
-        errorlog(error.message);
-})
-.then(()=>{
-        rl.prompt();
-})
+        .catch(error => {
+            errorlog(error.message);
+        })
+        .then(()=>{
+            rl.prompt();
+        });
 };
-
-
-
-
-
-
-
-
-
 
 exports.deleteCmd = (rl, id) => {
     validateId(id)
