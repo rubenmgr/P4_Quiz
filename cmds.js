@@ -203,7 +203,6 @@ exports.playCmd = rl => {
                     validateId(id)
                         .then(id => models.quiz.findById(id))
                         .then(quiz => {
-
                             makeQuestion(rl, `${quiz.question}? `)
                                 .then(a => {
                                     console.log(a);
