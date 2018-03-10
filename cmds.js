@@ -213,10 +213,6 @@ exports.playCmd = rl => {
                                         rl.prompt();
                                     }
                                 })
-                        .catch(Sequelize.ValidationError, error =>{
-                            errorlog("El quiz es erróneo:  ");
-                            error.errors.forEach(({message})=> errorlog(message));
-                        })
                         .catch(error => {
                             errorlog(error.message);
                         })
