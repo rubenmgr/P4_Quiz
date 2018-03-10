@@ -182,7 +182,7 @@ exports.testCmd = (rl,id) => {
 
 exports.playCmd = rl => {
     let score = 0;
-    let toBeResolved=new Array();
+    let toBeResolved=[];
 
     models.quiz.findAll()
         .then(quizzes => {
@@ -210,13 +210,10 @@ exports.playCmd = rl => {
                                         playOne();
                                     }else{
                                         console.log(`Incorrecto. Fin del juego. Aciertos: ${score}`);
+                                        log('Fin');
                                         rl.prompt();
                                     }
                                 })
-                        .catch(Sequelize.ValidationError, error =>{
-                            errorlog("El quiz es erróneo:  ");
-                            error.errors.forEach(({message})=> errorlog(message));
-                        })
                         .catch(error => {
                             errorlog(error.message);
                         })
