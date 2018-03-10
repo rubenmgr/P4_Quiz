@@ -181,16 +181,14 @@ exports.testCmd = (rl,id) => {
 
 
 exports.playCmd = rl => {
-    let counter = 1;
     let score = 0;
-    let toBeResolved=[];
+    let toBeResolved=new Array();
 
     models.quiz.findAll()
-        .each(quiz => {
-            toBeResolved[counter-1] = counter;
-            counter++;
+        .then(quizzes => {
+            quizzes.forEach((quiz, id) => {
+                toBeResolved[id] = quiz;
         })
-        .then(() => {
             const playOne = ()=> {
                 if ( toBeResolved.length <= 0){
                     log("No hay mas preguntas");
@@ -199,13 +197,10 @@ exports.playCmd = rl => {
                     rl.prompt();
                 }else{
                     let aleatorio = Math.floor(Math.random()*toBeResolved.length);
-                    let id = toBeResolved[aleatorio];
-                    validateId(id)
-                        .then(id => models.quiz.findById(id))
-                        .then(quiz => {
-                            makeQuestion(rl, `${quiz.question}? `)
+                    let quiz = toBeResolved[aleatorio];
+                    toBeResolved.splice(aleatorio,1);
+                    makeQuestion(rl, `${quiz.question}? `)
                                 .then(a => {
-                                    console.log(a);
                                     let resp = a.trim().toLowerCase()
                                     let resp2 =quiz.answer;
                                     if ( resp === resp2.trim().toLowerCase()){
@@ -214,13 +209,10 @@ exports.playCmd = rl => {
                                         log(`Correcto - Lleva ${score} aciertos`)
                                         playOne();
                                     }else{
-                                        log('INCORRECTO.');
-                                        log(`Fin del juego. Aciertos: ${score}`);
-                                        biglog(score,'blue');
+                                        log(`INCORRECTO. Fin del juego. Aciertos: ${score}`);
                                         rl.prompt();
                                     }
-                                });
-                        })
+                                })
                         .catch(error => {
                             errorlog(error.message);
                         })
@@ -232,6 +224,7 @@ exports.playCmd = rl => {
             playOne();
         });
 };
+
 
 exports.deleteCmd = (rl, id) => {
     validateId(id)
