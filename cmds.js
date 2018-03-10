@@ -209,7 +209,7 @@ exports.playCmd = rl => {
                                         log(`Correcto - Lleva ${score} aciertos`)
                                         playOne();
                                     }else{
-                                        log(`INCORRECTO. Fin del juego. Aciertos: ${score}`);
+                                        log(`Incorrecto. Fin del juego. Aciertos: ${score}`);
                                         rl.prompt();
                                     }
                                 })
