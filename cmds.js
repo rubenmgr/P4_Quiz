@@ -209,7 +209,7 @@ exports.playCmd = (socket,rl) => {
                                         log(socket,`Correcto - Lleva ${score} aciertos`)
                                         playOne();
                                     }else{
-                                        console.log(`Incorrecto. Fin del juego. Aciertos: ${score}`);
+                                        log(socket,`Incorrecto. Fin del juego. Aciertos: ${score}`);
                                         rl.prompt();
                                     }
                                 })
